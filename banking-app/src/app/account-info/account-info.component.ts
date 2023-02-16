@@ -26,7 +26,7 @@ export class AccountInfoComponent {
   }
 
   applyTransaction(): void {
-    
+
   }
 
   deleteAccount(): void {

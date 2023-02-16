@@ -32,8 +32,8 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display a user\'s name', () => {
-    const name = fixture.nativeElement.querySelector();
-    expect(name.innerHTML).toEqual('Christian');
+  it('should display user accounts if there are any', () => {
+    const accounts = fixture.nativeElement.querySelector('app-account-info');
+    expect(accounts.length).toEqual(0);
   });
 });

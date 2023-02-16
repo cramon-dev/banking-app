@@ -58,7 +58,7 @@ describe('TransactionManagerService', () => {
     const result = service.applyTransaction(account, -1400);
 
     expect(account.transactions.length).toEqual(1);
-    expect(account.balance).toEqual(100);
+    expect(account.balance).toEqual(1500);
     expect(result).toEqual(TransactionResult.FAILURE);
   });
 });

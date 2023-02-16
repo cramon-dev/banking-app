@@ -1,4 +1,3 @@
-import { jsDocComment } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Guid } from 'js-guid';
@@ -25,15 +24,19 @@ export class DashboardComponent implements OnInit {
     this.initialAmount = new FormControl(0, Validators.required);
   }
 
-  // The dashboard component shouldn't be the one to create a transaction.
+  // The dashboard component shouldn't be the one to create an account or a transaction.
   // Really it should be up to another service.
   create(): void {
-    // const value = this.initialAmount.get();
-    // this.user.accounts.push({
-    //   accountNumber: this.accountNumberCounter,
-    //   transactions: [
-        
-    //   ]
-    // });
+    // TODO - Get the value from the form.
+    const value = 100;
+    this.user.accounts.push({
+      accountNumber: this.accountNumberCounter,
+      balance: value,
+      transactions: [{
+        id: Guid.newGuid.toString(),
+        amount: value,
+        date: new Date()
+      }]
+    });
   }
 }

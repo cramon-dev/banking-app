@@ -10,6 +10,7 @@ export class TransactionManagerService {
   constructor() { }
 
   // When returning result, it's up to the consumer to show the result.
+  // This function is messy and needs to be altered in such a way that it's not doing ALL of the work.
   applyTransaction(account: UserAccount, amount: number): TransactionResult {
     /*
       Rules
@@ -18,12 +19,7 @@ export class TransactionManagerService {
       3. Balance can't be less than $100 at any time.
     */
 
-    const percentage = ((account.balance / amount) * 100);
-    if (percentage > 90) {
-      return TransactionResult.FAILURE;
-    }
-
-    const newBalance = account.balance - amount;
+    const newBalance = account.balance + amount;
 
     if (newBalance < 100) {
       return TransactionResult.FAILURE;
@@ -33,18 +29,26 @@ export class TransactionManagerService {
       return TransactionResult.FAILURE;
     }
 
-    // account.transactions.push({
-    //   id: Guid.newGuid().toString(),
-    //   amount: amount,
-    //   date: new Date()
-    // });
+    // I know this doesn't take into account -0, that's pretty edge casey.
+    if (amount < 0) {
+      const percentage = (Math.abs(account.balance / amount) * 100);
+      if (percentage > 90) {
+        return TransactionResult.FAILURE;
+      }
+    }
 
-    // const accountBalance = account.transactions.reduce((total, transaction) => {
-    //   total += transaction.amount;
-    //   return total;
-    // }, 0);
+    account.transactions.push({
+      id: Guid.newGuid().toString(),
+      amount: amount,
+      date: new Date()
+    });
 
-    // account.balance = accountBalance;
+    const accountBalance = account.transactions.reduce((total, transaction) => {
+      total += transaction.amount;
+      return total;
+    }, 0);
+
+    account.balance = accountBalance;
 
     return TransactionResult.SUCCESS;
   }
