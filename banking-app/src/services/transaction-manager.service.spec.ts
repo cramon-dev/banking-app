@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { TransactionResult } from 'src/models/transaction-result.model';
 import { UserAccount } from 'src/models/user-account.model';
 
 import { TransactionManagerService } from './transaction-manager.service';
@@ -18,11 +19,46 @@ describe('TransactionManagerService', () => {
   it('should add a transaction to a provided account', () => {
     const account = {
       accountNumber: 100,
-      transactions: []
+      balance: 100,
+      transactions: [
+        { id: '1234-ABCD', amount: 100 } // Initial seed
+      ]
     } as UserAccount;
-    service.applyTransaction(account, 100);
+    const result = service.applyTransaction(account, 100);
+
+    expect(account.transactions.length).toEqual(2);
+    expect(account.transactions[1].amount).toEqual(100);
+    expect(account.balance).toEqual(200);
+    expect(result).toEqual(TransactionResult.SUCCESS);
+  });
+
+  it('should not add a transaction to a provided account if the amount exceeds $10,000', () => {
+    const account = {
+      accountNumber: 100,
+      balance: 100,
+      transactions: [
+        { id: '1234-ABCD', amount: 100 }
+      ]
+    } as UserAccount;
+    const result = service.applyTransaction(account, 100000);
 
     expect(account.transactions.length).toEqual(1);
-    expect(account.transactions[0].amount).toEqual(100);
+    expect(account.balance).toEqual(100);
+    expect(result).toEqual(TransactionResult.FAILURE);
+  });
+
+  it('should not add a transaction to a provided account if the withdrawn amount exceeds 90% of its original balance', () => {
+    const account = {
+      accountNumber: 100,
+      balance: 1500,
+      transactions: [
+        { id: '1234-ABCD', amount: 1500 }
+      ]
+    } as UserAccount;
+    const result = service.applyTransaction(account, -1400);
+
+    expect(account.transactions.length).toEqual(1);
+    expect(account.balance).toEqual(100);
+    expect(result).toEqual(TransactionResult.FAILURE);
   });
 });

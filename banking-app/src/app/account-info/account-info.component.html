@@ -1,7 +1,8 @@
 <h3>ID: {{ account.accountNumber }}</h3>
 <p>Balance: {{ account.balance | currency }}</p>
-<!-- TODO - Need a specific component to list transactions. Maybe named "transaction-info"? -->
+<!-- TODO - Ideally have a specific component to list transactions. Maybe named "transaction-info"? -->
 <div *ngFor="let transaction in account.transactions">
   <p>Amount: {{ transaction.amount | currency }}</p>
   <p>Date: {{transaction.date | date}} </p>
 </div>
+<button (click)="deleteAccount($event)">Delete Account</button>

@@ -1,5 +1,14 @@
 <h1>Welcome, {{ user.name }}!</h1>
-<!-- These really should be "const" in the interest of keeping data immutable -->
-<div *ngFor="let account in user.accounts">
-  <app-account-info [account]="account"></app-account-info>
+<div *ngIf="hasAccounts">
+  <div *ngFor="let account in user.accounts">
+    <app-account-info [account]="account"></app-account-info>
+  </div>
 </div>
+<form>
+  <fieldset>
+    <h3>Create New Account</h3>
+    <legend>Amount (must be at least $100): </legend>
+    <input type="number" [formControl]="initialAmount"/>
+  </fieldset>
+  <button (click)="create()">Create Account</button>
+</form>
