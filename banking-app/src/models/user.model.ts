@@ -1,4 +1,7 @@
-interface User {
+import { UserAccount } from './user-account.model';
+
+export interface User {
   id: number;
-  accounts: Account[];
+  name: string;
+  accounts: UserAccount[];
 }

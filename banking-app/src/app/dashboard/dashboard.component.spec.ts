@@ -16,10 +16,24 @@ describe('DashboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+
+    // Ideally, I would like to move this mock data into a separate file so it and this test file aren't so tightly bound.
+    // Not to mention it would make for an easier time to modify the data like through some automated task.
+    component.user = {
+      id: 1,
+      name: 'Christian',
+      accounts: []
+    };
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display a user\'s name', () => {
+    const name = fixture.nativeElement.querySelector();
+    expect(name.innerHTML).toEqual('Christian');
   });
 });

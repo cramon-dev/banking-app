@@ -1,1 +1,5 @@
-<p>dashboard works!</p>
+<h1>Welcome, {{ user.name }}!</h1>
+<!-- These really should be "const" in the interest of keeping data immutable -->
+<div *ngFor="let account in user.accounts">
+  <app-account-info [account]="account"></app-account-info>
+</div>
