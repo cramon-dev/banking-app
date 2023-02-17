@@ -22,7 +22,14 @@ export class TransactionManagerService {
     if (amount < 0) { 
       // I know this doesn't take into account if somebody tries funny business with -0, that's pretty edge casey.
       const percentage = (Math.abs(account.balance / amount) * 100);
-      if ((percentage > 90) || (account.balance - amount < 100)) {
+      if ((percentage > 90)) {
+        return { 
+          type: ResultType.FAILURE,
+          reason: { withdrawal: { tooMuch: true }}
+        }
+      }
+
+      if ((account.balance + amount < 100)) {
         return { 
           type: ResultType.FAILURE,
           reason: { withdrawal: { tooMuch: true }}

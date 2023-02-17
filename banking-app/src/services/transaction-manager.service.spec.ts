@@ -62,4 +62,19 @@ describe('TransactionManagerService', () => {
     expect(account.balance).toEqual(1500);
     expect(result.reason).toEqual({ withdrawal: { tooMuch: true }});
   });
+
+  it('should not add a transaction to a provided account if the withdrawn amount exceeds its original balance', () => {
+    const account = {
+      accountNumber: 100,
+      balance: 1500,
+      transactions: [
+        { id: '1234-ABCD', amount: 1500 }
+      ]
+    } as UserAccount;
+    const result = service.applyTransaction(account, -14000);
+
+    expect(account.transactions.length).toEqual(1);
+    expect(account.balance).toEqual(1500);
+    expect(result.reason).toEqual({ withdrawal: { tooMuch: true }});
+  });
 });

@@ -44,6 +44,11 @@ export class AccountInfoComponent {
 
     switch(result.type) {
       case ResultType.FAILURE:
+        // Really messy but I've been having trouble with the form recognizing this error structure.
+        if (result.reason.withdrawal) {
+          alert('Withdrawals can\'t exceed 90% of your account balance or leave you with less than $100 in your account.');
+          return;
+        }
         this.transactionForm.setErrors(result.reason);
         break;
       case ResultType.SUCCESS:
