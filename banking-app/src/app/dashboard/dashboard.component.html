@@ -1,22 +1,21 @@
 <h1>Welcome, {{ user.name }}!</h1>
-<div *ngIf="hasAccounts">
-  <div *ngFor="let account of user.accounts">
-    <app-account-info [account]="account" (delete)="delete($event)"></app-account-info>
-  </div>
-</div>
 <form [formGroup]="accountForm">
   <fieldset>
-    <h3>Create New Account</h3>
-    <legend>Amount (must be at least $100): </legend>
-    <input type="number" formControlName="amount"/>
+    <legend>Create New Account</legend>
+    <label for="amount">Amount (must be at least $100): </label>
+    <input type="number" name="amount" formControlName="amount"/>
     <p *ngIf="formTouched && inputtedAmount?.errors?.deposit.tooMuch">
       Invalid amount. Deposits cannot exceed $10,000.
     </p>
     <p *ngIf="formTouched && inputtedAmount?.errors?.deposit.notEnough">
       Invalid amount. Deposits must be at least $100.
     </p>
-    <p>{{ accountForm.status }}</p>
   </fieldset>
   <!-- TODO - What if we need to add more functionality to this form in the future? Would need to consult the form for ANY errors. -->
   <button (click)="create()" [disabled]="(!formTouched || inputtedAmount?.errors) ? true : null">Create Account</button>
 </form>
+<div *ngIf="hasAccounts">
+  <div *ngFor="let account of user.accounts">
+    <app-account-info [account]="account" (delete)="delete($event)"></app-account-info>
+  </div>
+</div>

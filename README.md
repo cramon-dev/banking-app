@@ -2,4 +2,8 @@
 Small banking app for Radancy test.
 
 # install
-TODO - Fill this out when I'm out of time.
+Configure your system to use Node 14.16.0 and npm 6.14.11.
+If using nvm, just run "nvm install 14.16.0". Then cd into "banking-app" and run "ng-serve".
+
+# comments
+Sorry in advance for the not visually nice display. I was really concerned with getting the functionality right.
