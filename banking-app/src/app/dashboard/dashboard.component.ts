@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Guid } from 'js-guid';
 import { User } from 'src/models/user.model';
 
@@ -8,9 +8,11 @@ import { User } from 'src/models/user.model';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   @Input() user!: User;
-  initialAmount!: FormControl;
+  accountForm: FormGroup = new FormGroup({
+    initialAmount: new FormControl(0, [Validators.required, this.validateAmount])
+  });
 
   private accountNumberCounter = 1;
 
@@ -20,15 +22,23 @@ export class DashboardComponent implements OnInit {
     return this.user.accounts.length > 0;
   }
 
-  ngOnInit(): void {
-    this.initialAmount = new FormControl(0, Validators.required);
+  public get formTouched() {
+    return this.accountForm.touched;
   }
 
   // The dashboard component shouldn't be the one to create an account or a transaction.
   // Really it should be up to another service.
   create(): void {
-    // TODO - Get the value from the form.
-    const value = 100;
+    // I don't like to use alerts but this works for now. Ideally I would implement error states in the template to show the user in a non-intrusive way that they need to input a valid amount.
+    if (this.accountForm.getError('invalidAmount')) {
+      alert('Please deposit at least $100.');
+      return;
+    }
+
+    const value = this.accountForm.get('initialAmount')?.value;
+    if (value < 100) {
+      
+    }
     this.user.accounts.push({
       accountNumber: this.accountNumberCounter,
       balance: value,
@@ -38,5 +48,14 @@ export class DashboardComponent implements OnInit {
         date: new Date()
       }]
     });
+  }
+
+  // TODO - Move this out of this component. Should probably be in a utility folder like we would for custom pipes.
+  validateAmount(control: AbstractControl) {
+    if (control.value < 100) {
+      return { invalidAmount: true }
+    }
+
+    return null;
   }
 }

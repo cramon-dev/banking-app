@@ -22,7 +22,11 @@ describe('DashboardComponent', () => {
     component.user = {
       id: 1,
       name: 'Christian',
-      accounts: []
+      accounts: [
+        {
+          accountNumber: 1, balance: 100, transactions: []
+        }
+      ]
     };
 
     fixture.detectChanges();
@@ -34,6 +38,6 @@ describe('DashboardComponent', () => {
 
   it('should display user accounts if there are any', () => {
     const accounts = fixture.nativeElement.querySelector('app-account-info');
-    expect(accounts.length).toEqual(0);
+    expect(accounts.length).toEqual(1);
   });
 });
