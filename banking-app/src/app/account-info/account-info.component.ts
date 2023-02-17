@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TransactionResult } from 'src/models/transaction-result.model';
+import { ResultType, TransactionResult } from 'src/models/transaction-result.model';
 import { TransactionManagerService } from 'src/services/transaction-manager.service';
 import { UserAccount } from '../../models/user-account.model';
 import { validateAmount } from '../shared/validate-amount';
@@ -39,42 +39,28 @@ export class AccountInfoComponent {
     this.transactionManager = transactionManager;
   }
 
-  public get accountBalance() {
-    return this.account.transactions.reduce((total, transaction) => {
-      total += transaction.amount;
-      return total;
-    }, 0); // TODO - Accounts can't have less than $100.
-  }
+  applyTransaction(amount: number) {
+    const result = this.transactionManager.applyTransaction(this.account, amount);
 
-  // I know the logic shouldn't be duplicated, but I couldn't think of a great way to implement withdraw & deposit separately.
-  deposit(): void {
-    const result = this.transactionManager.applyTransaction(this.account, this.transactionForm.get('amount')?.value);
-
-    switch(result) {
-      case TransactionResult.FAILURE:
-        this.transactionForm.setErrors({invalidAmount: true});
+    switch(result.type) {
+      case ResultType.FAILURE:
+        this.transactionForm.setErrors(result.reason);
         break;
-      case TransactionResult.SUCCESS:
+      case ResultType.SUCCESS:
         this.transactionForm.reset();
         break;
       default:
         break;
     }
+  }
+
+  // I know the logic shouldn't be duplicated, but I couldn't think of something on the fly to implement withdraw & deposit separately.
+  deposit(): void {
+    this.applyTransaction(this.transactionForm.get('amount')?.value);
   }
 
   withdraw(): void {
     // Not proud of this.
-    const result = this.transactionManager.applyTransaction(this.account, -(this.transactionForm.get('amount')?.value));
-
-    switch(result) {
-      case TransactionResult.FAILURE:
-        this.transactionForm.setErrors({invalidAmount: true});
-        break;
-      case TransactionResult.SUCCESS:
-        this.transactionForm.reset();
-        break;
-      default:
-        break;
-    }
+    this.applyTransaction(-(this.transactionForm.get('amount')?.value));
   }
 }

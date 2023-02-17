@@ -20,7 +20,9 @@ describe('AccountInfoComponent', () => {
     component.account = {
       accountNumber: 1234,
       balance: 100,
-      transactions: []
+      transactions: [
+        { id: '1234-ABCD', amount: 1000, date: new Date() }
+      ]
     }
 
     fixture.detectChanges();
@@ -29,4 +31,9 @@ describe('AccountInfoComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display transactions if there are any', () => {
+    const transactions = fixture.nativeElement.querySelectorAll('.transaction');
+    expect(transactions.length).toEqual(1);
+  })
 });

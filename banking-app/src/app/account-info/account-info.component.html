@@ -1,7 +1,5 @@
 <h3>Account Number: {{ account.accountNumber }}</h3>
 <p>Balance: {{ account.balance | currency }}</p>
-<!-- TODO - Ideally have a specific component to list transactions. Maybe named "transaction-info"? -->
-<hr>
 <form [formGroup]="transactionForm">
   <fieldset>
     <h4>Withdraw / Deposit</h4>
@@ -14,14 +12,20 @@
   <p *ngIf="formTouched && inputtedAmount?.errors?.notEnough">
     Deposits must be at least $100.
   </p>
-  <!-- TODO - These buttons could probably inherit from some base button component class which disables itself in the event of inputted form state. -->
+  <!-- TODO - Alert? -->
+  <p *ngIf="formTouched && inputtedAmount?.errors?.withdrawal.tooMuch">
+    <!-- TODO - Something that would be nice would be to show the user how much 90% of their total balance is so they don't have to calculate themselves. -->
+    Withdrawals can't exceed 90% of your account balance or leave you with less than $100 in your account.
+  </p>
+  <!-- TODO - I imagine these buttons would inherit from some base button component class which disables itself in the event of inputted form error states. -->
   <button (click)="deposit()" [disabled]="(!formTouched || inputtedAmount?.errors) ? true : null">Deposit</button>
-  <button (click)="withdraw()" [disabled]="(!formTouched || inputtedAmount?.errors) ? true : null">Withdraw</button>
+  <button (click)="withdraw()" [disabled]="(!formTouched) ? true : null">Withdraw</button>
 </form>
 <button (click)="this.delete.emit(this.account.accountNumber)">Delete Account</button>
 <hr>
+<!-- TODO - Ideally have a specific component to list transactions. Maybe named "transaction-info"? -->
 <h4>Transactions</h4>
-<div *ngFor="let transaction of account.transactions">
+<div class="transaction" *ngFor="let transaction of account.transactions">
   <p>Amount: {{ transaction.amount | currency }}</p>
   <p>Date: {{transaction.date | date:'medium'}} </p>
 </div>

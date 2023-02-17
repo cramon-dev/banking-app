@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TransactionResult } from 'src/models/transaction-result.model';
+import { ResultType, TransactionResult } from 'src/models/transaction-result.model';
 import { UserAccount } from 'src/models/user-account.model';
 
 import { TransactionManagerService } from './transaction-manager.service';
@@ -29,7 +29,7 @@ describe('TransactionManagerService', () => {
     expect(account.transactions.length).toEqual(2);
     expect(account.transactions[1].amount).toEqual(100);
     expect(account.balance).toEqual(200);
-    expect(result).toEqual(TransactionResult.SUCCESS);
+    expect(result.type).toEqual(ResultType.SUCCESS);
   });
 
   it('should not add a transaction to a provided account if the amount exceeds $10,000', () => {
@@ -44,7 +44,8 @@ describe('TransactionManagerService', () => {
 
     expect(account.transactions.length).toEqual(1);
     expect(account.balance).toEqual(100);
-    expect(result).toEqual(TransactionResult.FAILURE);
+    expect(result.type).toEqual(ResultType.FAILURE);
+    expect(result.reason).toEqual({ deposit: { tooMuch: true }});
   });
 
   it('should not add a transaction to a provided account if the withdrawn amount exceeds 90% of its original balance', () => {
@@ -59,6 +60,6 @@ describe('TransactionManagerService', () => {
 
     expect(account.transactions.length).toEqual(1);
     expect(account.balance).toEqual(1500);
-    expect(result).toEqual(TransactionResult.FAILURE);
+    expect(result.reason).toEqual({ withdrawal: { tooMuch: true }});
   });
 });

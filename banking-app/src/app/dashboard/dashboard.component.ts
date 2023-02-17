@@ -50,6 +50,8 @@ export class DashboardComponent {
     this.accountForm.reset();
   }
 
+  // Again, this really should be moved to a dedicated service which handles accounts.
+  // Then, this component could either query for accounts or pass along an action to the manager to delete an account.
   delete(accountNumber: number): void {
     this.user.accounts = this.user.accounts.filter((account) => account.accountNumber !== accountNumber);
   }

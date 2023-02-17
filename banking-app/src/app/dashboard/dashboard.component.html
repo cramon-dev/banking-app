@@ -1,8 +1,8 @@
 <h1>Welcome, {{ user.name }}!</h1>
 <div *ngIf="hasAccounts">
-  <li *ngFor="let account of user.accounts">
+  <div *ngFor="let account of user.accounts">
     <app-account-info [account]="account" (delete)="delete($event)"></app-account-info>
-  </li>
+  </div>
 </div>
 <form [formGroup]="accountForm">
   <fieldset>
