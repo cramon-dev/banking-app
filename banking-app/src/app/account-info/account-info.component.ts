@@ -13,7 +13,7 @@ import { UserAccount } from '../../models/user-account.model';
 export class AccountInfoComponent {
   // For the sake of time, I need to add the non-null operator otherwise TS blows up in my face. It's messy and I would not normally do this.
   @Input() account!: UserAccount;
-  @Output() delete!: EventEmitter<number>;
+  @Output() delete: EventEmitter<number> = new EventEmitter();
 
   // TODO - Ideally, implement injection token here so that we could provide anything that fits the form of TransactionManagerService rather than sticking to the service itself.
   constructor(transactionManager: TransactionManagerService) { }
@@ -27,9 +27,5 @@ export class AccountInfoComponent {
 
   applyTransaction(): void {
 
-  }
-
-  deleteAccount(): void {
-    this.delete.emit(this.account.accountNumber);
   }
 }

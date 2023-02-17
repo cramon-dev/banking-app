@@ -29,7 +29,8 @@ export class DashboardComponent {
   // The dashboard component shouldn't be the one to create an account or a transaction.
   // Really it should be up to another service.
   create(): void {
-    // I don't like to use alerts but this works for now. Ideally I would implement error states in the template to show the user in a non-intrusive way that they need to input a valid amount.
+    // I don't like to use alerts but this works for now.
+    // Ideally I would implement error states in the template to show the user in a non-intrusive way that they need to input a valid amount.
     if (this.accountForm.getError('invalidAmount')) {
       alert('Please deposit at least $100.');
       return;
@@ -57,5 +58,9 @@ export class DashboardComponent {
     }
 
     return null;
+  }
+
+  delete(accountNumber: number): void {
+    this.user.accounts = this.user.accounts.filter((account) => account.accountNumber !== accountNumber);
   }
 }
