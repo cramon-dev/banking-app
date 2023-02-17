@@ -25,6 +25,15 @@ export class AccountInfoComponent {
 
   private transactionManager: TransactionManagerService;
 
+  // TODO - Move this to some base form component so that this doesn't need to live in this component. Hard to maintain this and other props otherwise.
+  public get formTouched() {
+    return this.transactionForm.touched;
+  }
+
+  public get inputtedAmount() {
+    return this.transactionForm.get('amount');
+  }
+
   // TODO - Ideally, implement injection token here so that we could provide anything that fits the form of TransactionManagerService rather than sticking to the service itself.
   constructor(transactionManager: TransactionManagerService) {
     this.transactionManager = transactionManager;

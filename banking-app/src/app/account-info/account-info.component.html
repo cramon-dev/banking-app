@@ -8,8 +8,15 @@
     <legend>Amount: </legend>
     <input type="number" formControlName="amount"/>
   </fieldset>
-  <button (click)="deposit()">Deposit</button>
-  <button (click)="withdraw()">Withdraw</button>
+  <p *ngIf="formTouched && inputtedAmount?.errors?.tooMuch">
+    Deposits cannot exceed $10,000.
+  </p>
+  <p *ngIf="formTouched && inputtedAmount?.errors?.notEnough">
+    Deposits must be at least $100.
+  </p>
+  <!-- TODO - These buttons could probably inherit from some base button component class which disables itself in the event of inputted form state. -->
+  <button (click)="deposit()" [disabled]="(!formTouched || inputtedAmount?.errors) ? true : null">Deposit</button>
+  <button (click)="withdraw()" [disabled]="(!formTouched || inputtedAmount?.errors) ? true : null">Withdraw</button>
 </form>
 <button (click)="this.delete.emit(this.account.accountNumber)">Delete Account</button>
 <hr>

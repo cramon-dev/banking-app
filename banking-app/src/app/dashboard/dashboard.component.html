@@ -9,7 +9,14 @@
     <h3>Create New Account</h3>
     <legend>Amount (must be at least $100): </legend>
     <input type="number" formControlName="amount"/>
+    <p *ngIf="formTouched && inputtedAmount?.errors?.tooMuch">
+      Invalid amount. Deposits cannot exceed $10,000.
+    </p>
+    <p *ngIf="formTouched && inputtedAmount?.errors?.notEnough">
+      Invalid amount. Deposits must be at least $100.
+    </p>
     <p>{{ accountForm.status }}</p>
   </fieldset>
-  <button (click)="create()" [disabled]="!formTouched || null">Create Account</button>
+  <!-- TODO - What if we need to add more functionality to this form in the future? Would need to consult the form for ANY errors. -->
+  <button (click)="create()" [disabled]="(!formTouched || inputtedAmount?.errors) ? true : null">Create Account</button>
 </form>

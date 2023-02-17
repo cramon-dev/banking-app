@@ -23,6 +23,12 @@ export class DashboardComponent {
     return this.user.accounts.length > 0;
   }
 
+
+  public get inputtedAmount() {
+    return this.accountForm.get('amount');
+  }
+
+  // TODO - Move this to some base form component so that this doesn't need to live in this component. Hard to maintain this and other props otherwise.
   public get formTouched() {
     return this.accountForm.touched;
   }
@@ -30,14 +36,7 @@ export class DashboardComponent {
   // The dashboard component shouldn't be the one to create an account or a transaction.
   // Really it should be up to another service.
   create(): void {
-    // I don't like to use alerts but this works for now.
-    // Ideally I would implement error states in the template to show the user in a non-intrusive way that they need to input a valid amount.
-    if (this.accountForm.getError('invalidAmount')) {
-      alert('Please deposit at least $100.');
-      return;
-    }
-
-    const value = this.accountForm.get('initialAmount')?.value;
+    const value = this.accountForm.get('amount')?.value;
     this.user.accounts.push({
       accountNumber: this.accountNumberCounter++, // Messy, I know. Ideally some other entity should keep track of this so there's no possible conflict.
       balance: value,
