@@ -37,7 +37,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should display user accounts if there are any', () => {
-    const accounts = fixture.nativeElement.querySelector('app-account-info');
-    expect(accounts.length).toEqual(1);
+    const accounts = fixture.nativeElement.querySelectorAll('app-account-info').length;
+    expect(accounts).toEqual(1);
   });
 });

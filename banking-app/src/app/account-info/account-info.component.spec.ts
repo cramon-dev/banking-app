@@ -16,6 +16,13 @@ describe('AccountInfoComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AccountInfoComponent);
     component = fixture.componentInstance;
+
+    component.account = {
+      accountNumber: 1234,
+      balance: 100,
+      transactions: []
+    }
+
     fixture.detectChanges();
   });
 
