@@ -8,8 +8,7 @@
   <fieldset>
     <h3>Create New Account</h3>
     <legend>Amount (must be at least $100): </legend>
-    <input type="number" formControlName="initialAmount"/>
-    <!-- <p *ngIf="initialAmount.touched && initialAmount.invalid">Please deposit at least $100.</p> -->
+    <input type="number" formControlName="amount"/>
     <p>{{ accountForm.status }}</p>
   </fieldset>
   <button (click)="create()" [disabled]="!formTouched || null">Create Account</button>

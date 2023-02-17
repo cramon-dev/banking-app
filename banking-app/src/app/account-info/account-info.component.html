@@ -1,8 +1,20 @@
-<h3>ID: {{ account.accountNumber }}</h3>
+<h3>Account Number: {{ account.accountNumber }}</h3>
 <p>Balance: {{ account.balance | currency }}</p>
 <!-- TODO - Ideally have a specific component to list transactions. Maybe named "transaction-info"? -->
+<hr>
+<form [formGroup]="transactionForm">
+  <fieldset>
+    <h4>Withdraw / Deposit</h4>
+    <legend>Amount: </legend>
+    <input type="number" formControlName="amount"/>
+  </fieldset>
+  <button (click)="deposit()">Deposit</button>
+  <button (click)="withdraw()">Withdraw</button>
+</form>
+<button (click)="this.delete.emit(this.account.accountNumber)">Delete Account</button>
+<hr>
+<h4>Transactions</h4>
 <div *ngFor="let transaction of account.transactions">
   <p>Amount: {{ transaction.amount | currency }}</p>
   <p>Date: {{transaction.date | date:'medium'}} </p>
 </div>
-<button (click)="this.delete.emit(this.account.accountNumber)">Delete Account</button>

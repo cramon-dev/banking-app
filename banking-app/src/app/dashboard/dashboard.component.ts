@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Guid } from 'js-guid';
 import { User } from 'src/models/user.model';
+import { validateAmount } from '../shared/validate-amount';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,7 @@ import { User } from 'src/models/user.model';
 export class DashboardComponent {
   @Input() user!: User;
   accountForm: FormGroup = new FormGroup({
-    initialAmount: new FormControl(0, [Validators.required, this.validateAmount])
+    amount: new FormControl(0, [Validators.required, validateAmount])
   });
 
   private accountNumberCounter = 1;
@@ -37,9 +38,6 @@ export class DashboardComponent {
     }
 
     const value = this.accountForm.get('initialAmount')?.value;
-    if (value < 100) {
-      
-    }
     this.user.accounts.push({
       accountNumber: this.accountNumberCounter,
       balance: value,
@@ -49,15 +47,8 @@ export class DashboardComponent {
         date: new Date()
       }]
     });
-  }
 
-  // TODO - Move this out of this component. Should probably be in a utility folder like we would for custom pipes.
-  validateAmount(control: AbstractControl) {
-    if (control.value < 100) {
-      return { invalidAmount: true }
-    }
-
-    return null;
+    this.accountForm.reset();
   }
 
   delete(accountNumber: number): void {

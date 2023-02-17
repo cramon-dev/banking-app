@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TransactionResult } from 'src/models/transaction-result.model';
 import { TransactionManagerService } from 'src/services/transaction-manager.service';
 import { UserAccount } from '../../models/user-account.model';
+import { validateAmount } from '../shared/validate-amount';
 
 
 // TODO - If continuing to go down the route of displaying transactions in-line with the account, consider altering the change detection strategy.
@@ -11,12 +14,21 @@ import { UserAccount } from '../../models/user-account.model';
   styleUrls: ['./account-info.component.css']
 })
 export class AccountInfoComponent {
+  // I know this form shares similarities with the create account form in the dashboard component.
+  // Ideally I'd like to create a base, abstract class for this form and then simply have dashboard and account-info extend that base.
+  transactionForm = new FormGroup({
+    amount: new FormControl(0, [Validators.required, validateAmount])
+  });
   // For the sake of time, I need to add the non-null operator otherwise TS blows up in my face. It's messy and I would not normally do this.
   @Input() account!: UserAccount;
   @Output() delete: EventEmitter<number> = new EventEmitter();
 
+  private transactionManager: TransactionManagerService;
+
   // TODO - Ideally, implement injection token here so that we could provide anything that fits the form of TransactionManagerService rather than sticking to the service itself.
-  constructor(transactionManager: TransactionManagerService) { }
+  constructor(transactionManager: TransactionManagerService) {
+    this.transactionManager = transactionManager;
+  }
 
   public get accountBalance() {
     return this.account.transactions.reduce((total, transaction) => {
@@ -25,7 +37,35 @@ export class AccountInfoComponent {
     }, 0); // TODO - Accounts can't have less than $100.
   }
 
-  applyTransaction(): void {
+  // I know the logic shouldn't be duplicated, but I couldn't think of a great way to implement withdraw & deposit separately.
+  deposit(): void {
+    const result = this.transactionManager.applyTransaction(this.account, this.transactionForm.get('amount')?.value);
 
+    switch(result) {
+      case TransactionResult.FAILURE:
+        this.transactionForm.setErrors({invalidAmount: true});
+        break;
+      case TransactionResult.SUCCESS:
+        this.transactionForm.reset();
+        break;
+      default:
+        break;
+    }
+  }
+
+  withdraw(): void {
+    // Not proud of this.
+    const result = this.transactionManager.applyTransaction(this.account, -(this.transactionForm.get('amount')?.value));
+
+    switch(result) {
+      case TransactionResult.FAILURE:
+        this.transactionForm.setErrors({invalidAmount: true});
+        break;
+      case TransactionResult.SUCCESS:
+        this.transactionForm.reset();
+        break;
+      default:
+        break;
+    }
   }
 }
