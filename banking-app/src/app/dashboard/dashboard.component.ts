@@ -39,7 +39,7 @@ export class DashboardComponent {
 
     const value = this.accountForm.get('initialAmount')?.value;
     this.user.accounts.push({
-      accountNumber: this.accountNumberCounter,
+      accountNumber: this.accountNumberCounter++, // Messy, I know. Ideally some other entity should keep track of this so there's no possible conflict.
       balance: value,
       transactions: [{
         id: Guid.newGuid.toString(),
