@@ -12,7 +12,7 @@
   <p *ngIf="formTouched && inputtedAmount?.errors?.deposit.notEnough">
     Deposits must be at least $100.
   </p>
-  <!-- TODO - Alert? -->
+  <!-- I was having trouble with withdrawal errors not showing here. Just hacked it with an alert (not ideal at all). -->
   <p *ngIf="formTouched && inputtedAmount?.errors?.withdrawal?.tooMuch">
     <!-- TODO - Something that would be nice would be to show the user how much 90% of their total balance is so they don't have to calculate themselves. -->
     Withdrawals can't exceed 90% of your account balance or leave you with less than $100 in your account.

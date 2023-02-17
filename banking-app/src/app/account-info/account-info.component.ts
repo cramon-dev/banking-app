@@ -30,6 +30,7 @@ export class AccountInfoComponent {
     return this.transactionForm.touched;
   }
 
+  // TODO - This and the same prop in the parent dashboard component should be abstracted away as a getter. Providing a name to that getter should give us the form control cleanly.
   public get inputtedAmount() {
     return this.transactionForm.get('amount');
   }
